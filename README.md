@@ -24,7 +24,7 @@ xinxinShop
 
 | 技术                 | 版本  |
 | -------------------- |-----|
-| SpringBoot           |     |
+| SpringBoot           |2.7.5     |
 | SpringSecurity       |     |
 | MyBatis              |     |
 | Redis                |     |
