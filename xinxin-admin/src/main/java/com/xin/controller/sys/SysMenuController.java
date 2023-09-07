@@ -1,6 +1,5 @@
 package com.xin.controller.sys;
 
-import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.xin.api.CommonResult;

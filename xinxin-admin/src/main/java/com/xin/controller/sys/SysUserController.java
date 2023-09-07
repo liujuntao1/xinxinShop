@@ -4,6 +4,7 @@ import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.xin.annotation.LogOperation;
+import com.xin.annotation.Permission;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.SysUser;
@@ -49,6 +50,8 @@ public class SysUserController {
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
+
+    @Permission("sysuser.pageList")
     @LogOperation("用户分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),

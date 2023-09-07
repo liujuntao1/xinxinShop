@@ -35,9 +35,13 @@ import java.util.List;
 @Slf4j
 public class LoginController {
 
-    @Autowired
+
     private SysUserMapper sysUserMapper;
 
+    @Autowired
+    public void setSysUserMapper(SysUserMapper sysUserMapper) {
+        this.sysUserMapper = sysUserMapper;
+    }
 
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class),
@@ -76,4 +80,13 @@ public class LoginController {
         return CommonResult.success(StpUtil.isLogin(userId));
     }
 
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = Boolean.class),
+    })
+    @ApiOperation(value = "退出登录", response = JSONObject.class, notes = "退出登录")
+    @RequestMapping(path = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
+    public CommonResult<Boolean> logout() {
+        StpUtil.logout();
+        return CommonResult.success(true);
+    }
 }

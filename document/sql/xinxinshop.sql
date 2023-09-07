@@ -11,7 +11,7 @@
  Target Server Version : 50742
  File Encoding         : 65001
 
- Date: 07/09/2023 11:09:42
+ Date: 07/09/2023 14:50:21
 */
 
 SET NAMES utf8mb4;
@@ -32,32 +32,16 @@ CREATE TABLE `sys_log`  (
   `created_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updated_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
-INSERT INTO `sys_log` VALUES (6, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 09:52:36', '2023-09-07 09:52:36');
-INSERT INTO `sys_log` VALUES (7, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 09:55:40', '2023-09-07 09:55:40');
-INSERT INTO `sys_log` VALUES (8, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 09:56:19', '2023-09-07 09:56:19');
-INSERT INTO `sys_log` VALUES (9, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 09:56:24', '2023-09-07 09:56:24');
-INSERT INTO `sys_log` VALUES (10, NULL, NULL, 1, '新增用户', NULL, 1, '2023-09-07 09:58:22', '2023-09-07 09:58:22');
-INSERT INTO `sys_log` VALUES (11, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 09:59:12', '2023-09-07 09:59:12');
-INSERT INTO `sys_log` VALUES (12, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:00:54', '2023-09-07 10:00:54');
-INSERT INTO `sys_log` VALUES (13, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:01:31', '2023-09-07 10:01:31');
-INSERT INTO `sys_log` VALUES (14, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:05:32', '2023-09-07 10:05:32');
-INSERT INTO `sys_log` VALUES (15, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:08:33', '2023-09-07 10:08:33');
-INSERT INTO `sys_log` VALUES (16, NULL, NULL, 1, '新增用户', NULL, 1, '2023-09-07 10:09:52', '2023-09-07 10:09:52');
-INSERT INTO `sys_log` VALUES (17, NULL, NULL, 1, '新增用户', NULL, 1, '2023-09-07 10:09:53', '2023-09-07 10:09:53');
-INSERT INTO `sys_log` VALUES (18, NULL, NULL, 1, '新增用户', NULL, 1, '2023-09-07 10:09:54', '2023-09-07 10:09:54');
-INSERT INTO `sys_log` VALUES (19, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:10:28', '2023-09-07 10:10:28');
-INSERT INTO `sys_log` VALUES (20, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:10:57', '2023-09-07 10:10:57');
-INSERT INTO `sys_log` VALUES (21, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:11:01', '2023-09-07 10:11:01');
-INSERT INTO `sys_log` VALUES (22, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:11:29', '2023-09-07 10:11:29');
-INSERT INTO `sys_log` VALUES (23, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:12:26', '2023-09-07 10:12:26');
-INSERT INTO `sys_log` VALUES (24, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:13:58', '2023-09-07 10:13:58');
-INSERT INTO `sys_log` VALUES (25, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:23:06', '2023-09-07 10:23:06');
-INSERT INTO `sys_log` VALUES (26, NULL, NULL, 1, '用户分页列表', NULL, 1, '2023-09-07 10:23:55', '2023-09-07 10:23:55');
+INSERT INTO `sys_log` VALUES (33, 1, 'johndoe', 1, '用户分页列表', '192.168.1.111', 1, '2023-09-07 14:37:11', '2023-09-07 14:37:11');
+INSERT INTO `sys_log` VALUES (34, 1, 'johndoe', 1, '用户分页列表', '192.168.1.111', 1, '2023-09-07 14:40:58', '2023-09-07 14:40:58');
+INSERT INTO `sys_log` VALUES (35, 1, 'johndoe', 1, '用户分页列表', '192.168.1.111', 1, '2023-09-07 14:40:59', '2023-09-07 14:40:59');
+INSERT INTO `sys_log` VALUES (36, 1, 'johndoe', 1, '用户分页列表', '192.168.1.111', 1, '2023-09-07 14:41:14', '2023-09-07 14:41:14');
+INSERT INTO `sys_log` VALUES (37, 1, 'johndoe', 1, '用户分页列表', '192.168.1.111', 1, '2023-09-07 14:41:14', '2023-09-07 14:41:14');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -137,15 +121,12 @@ CREATE TABLE `sys_user`  (
   `created_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updated_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'John Doe', 'johndoe', '1234567890', 'johndoe@example.com', 'http://example.com/avatar.jpg', NULL, 'e10adc3949ba59abbe56e057f20f883e', 1, '2023-09-07 09:58:22', '2023-09-07 09:58:22');
-INSERT INTO `sys_user` VALUES (2, 'John Doe', 'johndoe', '1234567890', 'johndoe@example.com', 'http://example.com/avatar.jpg', NULL, 'e10adc3949ba59abbe56e057f20f883e', 1, '2023-09-07 10:09:52', '2023-09-07 10:09:52');
-INSERT INTO `sys_user` VALUES (3, 'John Doe', 'johndoe', '1234567890', 'johndoe@example.com', 'http://example.com/avatar.jpg', NULL, 'e10adc3949ba59abbe56e057f20f883e', 1, '2023-09-07 10:09:53', '2023-09-07 10:09:53');
-INSERT INTO `sys_user` VALUES (4, 'John Doe', 'johndoe', '1234567890', 'johndoe@example.com', 'http://example.com/avatar.jpg', NULL, 'e10adc3949ba59abbe56e057f20f883e', 1, '2023-09-07 10:09:54', '2023-09-07 10:09:54');
+INSERT INTO `sys_user` VALUES (1, 'John Doe', 'johndoe', '1234567890', 'johndoe@example.com', 'http://example.com/avatar.jpg', 1, 'e10adc3949ba59abbe56e057f20f883e', 1, '2023-09-07 09:58:22', '2023-09-07 14:14:22');
 
 -- ----------------------------
 -- Table structure for sys_user_role
