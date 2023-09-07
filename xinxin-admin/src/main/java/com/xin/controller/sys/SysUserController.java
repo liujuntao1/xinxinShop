@@ -8,9 +8,13 @@ import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.SysUser;
 import com.xin.entity.sys.SysUserExample;
+import com.xin.entity.sys.SysUserRole;
+import com.xin.entity.sys.SysUserRoleExample;
 import com.xin.enums.IsDeletedEnum;
 import com.xin.mapper.sys.SysUserMapper;
+import com.xin.mapper.sys.SysUserRoleMapper;
 import com.xin.param.sys.SaveSysUserParam;
+import com.xin.param.sys.SaveSysUserRoleParam;
 import com.xin.utils.Asserts;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +46,8 @@ public class SysUserController {
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @LogOperation("用户分页列表")
     @ApiResponses({
@@ -66,6 +72,20 @@ public class SysUserController {
         }
         PageResult<SysUser> sysUserPageResult = PageResult.convertPageResult(sysUserMapper.selectByExample(sysUserExample));
         return CommonResult.success(sysUserPageResult);
+    }
+
+    @LogOperation("新增用户角色")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = SysUserRole.class),
+    })
+    @ApiOperation(value = "新增用户角色", response = JSONObject.class, notes = "新增用户角色")
+    @PostMapping(path = "/insertUserRole")
+    public CommonResult<SysUserRole> insertUserRole(@RequestBody SaveSysUserRoleParam saveSysUserParam) {
+        deleteUserRoleById(saveSysUserParam.getUserId());
+        SysUserRole sysUserRole = new SysUserRole();
+        BeanUtils.copyProperties(saveSysUserParam, sysUserRole);
+        sysUserRoleMapper.insertSelective(sysUserRole);
+        return CommonResult.success(sysUserRole);
     }
 
     @LogOperation("新增用户")
@@ -112,10 +132,43 @@ public class SysUserController {
         if (sysUser == null) {
             Asserts.fail("未找到用户信息！");
         }
+        deleteUserRoleById(id);
         //这里做一个假删除，然后修改
         sysUser.setIsDeleted(IsDeletedEnum.Deleted.getValue());
         sysUserMapper.updateByPrimaryKeySelective(sysUser);
         return CommonResult.success(sysUser);
+    }
+
+    @LogOperation("清空用户角色")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = String.class),
+    })
+    @ApiOperation(value = "清空用户角色", response = JSONObject.class, notes = "清空用户角色")
+    @PostMapping(path = "/deleteUserRoleById")
+    public CommonResult<String> deleteUserRoleById(@NotNull(message = "用户id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
+        SysUserRoleExample sysUserRoleExample = new SysUserRoleExample();
+        sysUserRoleExample.createCriteria()
+                .andUserIdEqualTo(id);
+        SysUserRole sysUserRole = new SysUserRole();
+        sysUserRole.setIsDeleted(IsDeletedEnum.Deleted.getValue());
+        sysUserRoleMapper.updateByExampleSelective(sysUserRole, sysUserRoleExample);
+        return CommonResult.success("操作成功！");
+    }
+
+    @LogOperation("查询用户关联的角色")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = SysUserRole.class),
+    })
+    @ApiOperation(value = "查询用户关联的角色", response = JSONObject.class, notes = "查询用户关联的角色")
+    @PostMapping(path = "/listUserRoleById")
+    public CommonResult<List<SysUserRole>> listUserRoleById(
+            @NotNull(message = "用户ID不能为空！") @RequestParam(name = "userId", required = false) Integer userId) {
+        SysUserRoleExample sysUserRoleExample = new SysUserRoleExample();
+        sysUserRoleExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                .andUserIdEqualTo(userId);
+        List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectByExample(sysUserRoleExample);
+        return CommonResult.success(sysUserRoles);
     }
 
     @LogOperation("查询全部用户")

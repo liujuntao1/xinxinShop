@@ -3,5 +3,7 @@ D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\excep
 D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\utils\Asserts.java
 D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\exception\GlobalControllerAdvice.java
 D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\enums\ResultCode.java
+D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\enums\LogTypeEnums.java
 D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\api\PageResult.java
+D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\enums\IsDeletedEnum.java
 D:\刘俊涛\xx商城项目\xinxinShop\xinxin-common\src\main\java\com\xin\api\CommonResult.java

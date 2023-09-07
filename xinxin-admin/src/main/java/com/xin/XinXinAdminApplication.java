@@ -2,6 +2,7 @@ package com.xin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @Author: ljt
@@ -10,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Version 1.0.0
  */
 @SpringBootApplication
+//开启事务
+@EnableTransactionManagement
 public class XinXinAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(XinXinAdminApplication.class, args);
