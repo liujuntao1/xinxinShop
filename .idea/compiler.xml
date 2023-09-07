@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="xinxin-common" />
         <module name="xinxin-admin" />
+        <module name="xinxin-satoken" />
       </profile>
     </annotationProcessing>
   </component>
@@ -16,6 +17,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="xinxin-admin" options="-parameters" />
       <module name="xinxin-common" options="-parameters" />
+      <module name="xinxin-satoken" options="-parameters" />
     </option>
   </component>
 </project>

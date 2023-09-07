@@ -16,10 +16,10 @@
     <name>xinxin-admin</name>
     <description>xinxin-admin project for xinxinShop</description>
     <dependencies>
-        <!--xinxinShop通用模块-->
+        <!--xinxinShop saToken认证模块-->
         <dependency>
             <groupId>com.xin</groupId>
-            <artifactId>xinxin-common</artifactId>
+            <artifactId>xinxin-satoken</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

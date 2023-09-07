@@ -1,5 +1,6 @@
 package com.xin;
 
+import cn.dev33.satoken.SaManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -16,5 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class XinXinAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(XinXinAdminApplication.class, args);
+        System.out.println("启动成功，Sa-Token 配置如下：" + SaManager.getConfig());
     }
 }

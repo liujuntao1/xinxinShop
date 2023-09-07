@@ -12,6 +12,7 @@
     <modules>
         <module>xinxin-common</module>
         <module>xinxin-admin</module>
+        <module>xinxin-satoken</module>
     </modules>
 
     <parent>
@@ -31,6 +32,7 @@
         <hutool.version>5.8.9</hutool.version>
         <mybatis.version>2.2.0</mybatis.version>
         <xinxin-common.version>1.0-SNAPSHOT</xinxin-common.version>
+        <xinxin-satoken.version>1.0-SNAPSHOT</xinxin-satoken.version>
         <pagehelper-starter.version>1.4.5</pagehelper-starter.version>
         <springfox-swagger.version>3.0.0</springfox-swagger.version>
         <swagger-models.version>1.6.0</swagger-models.version>
@@ -38,6 +40,7 @@
         <fastjson.version>1.2.5</fastjson.version>
         <mysql-connector.version>8.0.29</mysql-connector.version>
         <druid.version>1.2.14</druid.version>
+        <sa-token.version>1.35.0.RC</sa-token.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
     </properties>
 
@@ -68,6 +71,12 @@
                 <groupId>com.xin</groupId>
                 <artifactId>xinxin-common</artifactId>
                 <version>${xinxin-common.version}</version>
+            </dependency>
+            <!--xinxinShop saToken认证模块-->
+            <dependency>
+                <groupId>com.xin</groupId>
+                <artifactId>xinxin-satoken</artifactId>
+                <version>${xinxin-satoken.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -124,6 +133,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+            <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
