@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @Author: ljt
  * @Date: 2023/9/6 15:34
- * @Description: SysUserController
+ * @Description: SysRoleController
  * @Version 1.0.0
  */
 @RestController

@@ -29,7 +29,7 @@ public class PageResult<T> {
     }
 
     public static <T> PageResult<T> convertPageResult(List<T> data) {
-        PageInfo<T> pageInfo = new PageInfo<>();
+        PageInfo pageInfo = new PageInfo(data);
         return new PageResult<>(data, pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal());
     }
 }

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xin.mapper.sys.SysRoleMapper">
-  <resultMap id="BaseResultMap" type="com.xin.entity.sys.SysRole">
+<mapper namespace="com.xin.mapper.sys.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.xin.entity.sys.SysMenu">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -70,15 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, code, description, `status`, is_deleted, created_time, updated_time
+    id, `name`, code, url, icon, parent_id, sort, `status`, is_deleted, created_time,
+    updated_time
   </sql>
-  <select id="selectByExample" parameterType="com.xin.entity.sys.SysRoleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.xin.entity.sys.SysMenuExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from sys_role
+    from sys_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,29 +101,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from sys_role
+    from sys_menu
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from sys_role
+    delete from sys_menu
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.xin.entity.sys.SysRoleExample">
-    delete from sys_role
+  <delete id="deleteByExample" parameterType="com.xin.entity.sys.SysMenuExample">
+    delete from sys_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysRole" useGeneratedKeys="true">
-    insert into sys_role (`name`, code, description,
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysMenu" useGeneratedKeys="true">
+    insert into sys_menu (`name`, code, url,
+      icon, parent_id, sort,
       `status`, is_deleted, created_time,
       updated_time)
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+      #{icon,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER},
       #{status,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP},
       #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysRole" useGeneratedKeys="true">
-    insert into sys_role
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysMenu" useGeneratedKeys="true">
+    insert into sys_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
         `name`,
@@ -127,8 +133,17 @@
       <if test="code != null">
         code,
       </if>
-      <if test="description != null">
-        description,
+      <if test="url != null">
+        url,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="sort != null">
+        sort,
       </if>
       <if test="status != null">
         `status`,
@@ -150,8 +165,17 @@
       <if test="code != null">
         #{code,jdbcType=VARCHAR},
       </if>
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -167,14 +191,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.xin.entity.sys.SysRoleExample" resultType="java.lang.Long">
-    select count(*) from sys_role
+  <select id="countByExample" parameterType="com.xin.entity.sys.SysMenuExample" resultType="java.lang.Long">
+    select count(*) from sys_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update sys_role
+    update sys_menu
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -185,8 +209,17 @@
       <if test="record.code != null">
         code = #{record.code,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null">
-        description = #{record.description,jdbcType=VARCHAR},
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null">
+        icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
       </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=INTEGER},
@@ -206,11 +239,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update sys_role
+    update sys_menu
     set id = #{record.id,jdbcType=INTEGER},
       `name` = #{record.name,jdbcType=VARCHAR},
       code = #{record.code,jdbcType=VARCHAR},
-      description = #{record.description,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      icon = #{record.icon,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      sort = #{record.sort,jdbcType=INTEGER},
       `status` = #{record.status,jdbcType=INTEGER},
       is_deleted = #{record.isDeleted,jdbcType=INTEGER},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -219,8 +255,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xin.entity.sys.SysRole">
-    update sys_role
+  <update id="updateByPrimaryKeySelective" parameterType="com.xin.entity.sys.SysMenu">
+    update sys_menu
     <set>
       <if test="name != null">
         `name` = #{name,jdbcType=VARCHAR},
@@ -228,8 +264,17 @@
       <if test="code != null">
         code = #{code,jdbcType=VARCHAR},
       </if>
-      <if test="description != null">
-        description = #{description,jdbcType=VARCHAR},
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
@@ -246,11 +291,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.xin.entity.sys.SysRole">
-    update sys_role
+  <update id="updateByPrimaryKey" parameterType="com.xin.entity.sys.SysMenu">
+    update sys_menu
     set `name` = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
       `status` = #{status,jdbcType=INTEGER},
       is_deleted = #{isDeleted,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

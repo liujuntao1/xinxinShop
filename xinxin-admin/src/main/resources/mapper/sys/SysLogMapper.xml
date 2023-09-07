@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xin.mapper.sys.SysUserMapper">
-  <resultMap id="BaseResultMap" type="com.xin.entity.sys.SysUser">
+<mapper namespace="com.xin.mapper.sys.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.xin.entity.sys.SysLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="log_type" jdbcType="INTEGER" property="logType" />
+    <result column="log_content" jdbcType="VARCHAR" property="logContent" />
+    <result column="operation_ip" jdbcType="VARCHAR" property="operationIp" />
     <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
@@ -73,16 +71,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, nick_name, user_name, phone, email, avatar, `status`, pwd, is_deleted, created_time,
+    id, user_id, user_name, log_type, log_content, operation_ip, is_deleted, created_time, 
     updated_time
   </sql>
-  <select id="selectByExample" parameterType="com.xin.entity.sys.SysUserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.xin.entity.sys.SysLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from sys_user
+    from sys_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -99,54 +97,46 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
-    from sys_user
+    from sys_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from sys_user
+    delete from sys_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.xin.entity.sys.SysUserExample">
-    delete from sys_user
+  <delete id="deleteByExample" parameterType="com.xin.entity.sys.SysLogExample">
+    delete from sys_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysUser" useGeneratedKeys="true">
-    insert into sys_user (nick_name, user_name, phone,
-      email, avatar, `status`,
-      pwd, is_deleted, created_time,
-      updated_time)
-    values (#{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-      #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
-      #{pwd,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP},
-      #{updatedTime,jdbcType=TIMESTAMP})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysLog" useGeneratedKeys="true">
+    insert into sys_log (user_id, user_name, log_type, 
+      log_content, operation_ip, is_deleted, 
+      created_time, updated_time)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{logType,jdbcType=INTEGER}, 
+      #{logContent,jdbcType=VARCHAR}, #{operationIp,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysUser" useGeneratedKeys="true">
-    insert into sys_user
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysLog" useGeneratedKeys="true">
+    insert into sys_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="nickName != null">
-        nick_name,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="userName != null">
         user_name,
       </if>
-      <if test="phone != null">
-        phone,
+      <if test="logType != null">
+        log_type,
       </if>
-      <if test="email != null">
-        email,
+      <if test="logContent != null">
+        log_content,
       </if>
-      <if test="avatar != null">
-        avatar,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="pwd != null">
-        pwd,
+      <if test="operationIp != null">
+        operation_ip,
       </if>
       <if test="isDeleted != null">
         is_deleted,
@@ -159,26 +149,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="nickName != null">
-        #{nickName,jdbcType=VARCHAR},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
+      <if test="logType != null">
+        #{logType,jdbcType=INTEGER},
       </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
+      <if test="logContent != null">
+        #{logContent,jdbcType=VARCHAR},
       </if>
-      <if test="avatar != null">
-        #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="pwd != null">
-        #{pwd,jdbcType=VARCHAR},
+      <if test="operationIp != null">
+        #{operationIp,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null">
         #{isDeleted,jdbcType=INTEGER},
@@ -191,38 +175,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.xin.entity.sys.SysUserExample" resultType="java.lang.Long">
-    select count(*) from sys_user
+  <select id="countByExample" parameterType="com.xin.entity.sys.SysLogExample" resultType="java.lang.Long">
+    select count(*) from sys_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update sys_user
+    update sys_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.nickName != null">
-        nick_name = #{record.nickName,jdbcType=VARCHAR},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
-      <if test="record.phone != null">
-        phone = #{record.phone,jdbcType=VARCHAR},
+      <if test="record.logType != null">
+        log_type = #{record.logType,jdbcType=INTEGER},
       </if>
-      <if test="record.email != null">
-        email = #{record.email,jdbcType=VARCHAR},
+      <if test="record.logContent != null">
+        log_content = #{record.logContent,jdbcType=VARCHAR},
       </if>
-      <if test="record.avatar != null">
-        avatar = #{record.avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null">
-        `status` = #{record.status,jdbcType=INTEGER},
-      </if>
-      <if test="record.pwd != null">
-        pwd = #{record.pwd,jdbcType=VARCHAR},
+      <if test="record.operationIp != null">
+        operation_ip = #{record.operationIp,jdbcType=VARCHAR},
       </if>
       <if test="record.isDeleted != null">
         is_deleted = #{record.isDeleted,jdbcType=INTEGER},
@@ -239,15 +217,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update sys_user
+    update sys_log
     set id = #{record.id,jdbcType=INTEGER},
-      nick_name = #{record.nickName,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
-      phone = #{record.phone,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR},
-      avatar = #{record.avatar,jdbcType=VARCHAR},
-      `status` = #{record.status,jdbcType=INTEGER},
-      pwd = #{record.pwd,jdbcType=VARCHAR},
+      log_type = #{record.logType,jdbcType=INTEGER},
+      log_content = #{record.logContent,jdbcType=VARCHAR},
+      operation_ip = #{record.operationIp,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=INTEGER},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
@@ -255,29 +231,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xin.entity.sys.SysUser">
-    update sys_user
+  <update id="updateByPrimaryKeySelective" parameterType="com.xin.entity.sys.SysLog">
+    update sys_log
     <set>
-      <if test="nickName != null">
-        nick_name = #{nickName,jdbcType=VARCHAR},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
+      <if test="logType != null">
+        log_type = #{logType,jdbcType=INTEGER},
       </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
+      <if test="logContent != null">
+        log_content = #{logContent,jdbcType=VARCHAR},
       </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="pwd != null">
-        pwd = #{pwd,jdbcType=VARCHAR},
+      <if test="operationIp != null">
+        operation_ip = #{operationIp,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null">
         is_deleted = #{isDeleted,jdbcType=INTEGER},
@@ -291,15 +261,13 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.xin.entity.sys.SysUser">
-    update sys_user
-    set nick_name = #{nickName,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.xin.entity.sys.SysLog">
+    update sys_log
+    set user_id = #{userId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      avatar = #{avatar,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=INTEGER},
-      pwd = #{pwd,jdbcType=VARCHAR},
+      log_type = #{logType,jdbcType=INTEGER},
+      log_content = #{logContent,jdbcType=VARCHAR},
+      operation_ip = #{operationIp,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}

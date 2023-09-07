@@ -1,39 +1,45 @@
-package com.xin.entity;
+package com.xin.entity.sys;
+
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
- * 系统角色表
- * sys_role
+ * 日志表
+ * sys_log
  */
 @Data
-public class SysRole implements Serializable {
+public class SysLog implements Serializable {
     /**
      * 主键
      */
     private Integer id;
 
     /**
-     * 角色名称
+     * 用户ID
      */
-    private String name;
+    private Integer userId;
 
     /**
-     * 角色编码
+     * 用户名
      */
-    private String code;
+    private String userName;
 
     /**
-     * 角色描述
+     * 日志类型（1：操作日志2：登录日志）
      */
-    private String description;
+    private Integer logType;
 
     /**
-     * 启用状态（1：启用0:禁用）
+     * 日志内容
      */
-    private Integer status;
+    private String logContent;
+
+    /**
+     * ip
+     */
+    private String operationIp;
 
     /**
      * 删除状态（1：正常0：已删除）

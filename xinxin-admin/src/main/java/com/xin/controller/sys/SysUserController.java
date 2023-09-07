@@ -3,6 +3,7 @@ package com.xin.controller.sys;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.SysUser;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sysUser")
-@Api(tags = {"系统用户"})
+@Api(tags = {"用户管理"})
 @Validated
 @Slf4j
 public class SysUserController {
@@ -42,6 +43,7 @@ public class SysUserController {
     private SysUserMapper sysUserMapper;
 
 
+    @LogOperation("用户分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -66,6 +68,7 @@ public class SysUserController {
         return CommonResult.success(sysUserPageResult);
     }
 
+    @LogOperation("新增用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -79,6 +82,7 @@ public class SysUserController {
         return CommonResult.success(sysUser);
     }
 
+    @LogOperation("修改用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -97,6 +101,7 @@ public class SysUserController {
         return CommonResult.success(sysUser);
     }
 
+    @LogOperation("删除单个用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -113,6 +118,7 @@ public class SysUserController {
         return CommonResult.success(sysUser);
     }
 
+    @LogOperation("查询全部用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
