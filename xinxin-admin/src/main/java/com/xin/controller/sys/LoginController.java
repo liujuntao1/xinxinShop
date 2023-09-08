@@ -9,15 +9,13 @@ import com.xin.entity.sys.SysUser;
 import com.xin.entity.sys.SysUserExample;
 import com.xin.enums.IsDeletedEnum;
 import com.xin.mapper.sys.SysUserMapper;
+import com.xin.param.sys.LoginParam;
 import com.xin.utils.Asserts;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -48,12 +46,11 @@ public class LoginController {
     })
     @ApiOperation(value = "登录接口", response = JSONObject.class, notes = "登录接口")
     @RequestMapping(path = "/login", method = {RequestMethod.POST, RequestMethod.GET})
-    public CommonResult<String> login(@ApiParam(name = "userName", value = "用户名") @NotNull(message = "用户名不能为空！") @RequestParam(name = "userName", required = false) String userName,
-                                      @ApiParam(name = "passWord", value = "密码") @NotNull(message = "密码不能为空！") @RequestParam(name = "passWord", required = false) String passWord) {
+    public CommonResult<String> login(@Validated @NotNull(message = "登录实体不能为空！") @RequestBody LoginParam loginParam) {
         SysUserExample sysUserExample = new SysUserExample();
         sysUserExample.createCriteria()
                 .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
-                .andUserNameEqualTo(userName);
+                .andUserNameEqualTo(loginParam.getUserName());
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
         if (CollectionUtil.isEmpty(sysUsers)) {
             Asserts.fail("未找到用户信息！");
@@ -62,7 +59,7 @@ public class LoginController {
         if (sysUser.getStatus().equals(IsDeletedEnum.Deleted.getValue())) {
             Asserts.fail("用户已被禁用！");
         }
-        if (!sysUser.getPwd().equals(MD5.create().digestHex(passWord))) {
+        if (!sysUser.getPwd().equals(MD5.create().digestHex(loginParam.getPassWord()))) {
             Asserts.fail("密码错误！");
         }
         //会话登录：参数填写要登录的账号id，建议的数据类型：long | int | String， 不可以传入复杂类型，如：User、Admin 等等

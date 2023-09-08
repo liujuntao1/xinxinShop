@@ -9,6 +9,7 @@ package com.xin.enums;
 public enum ResultCode {
     success(0, "操作成功！"),
     error(500, "操作失败！"),
+    not_login(501, "未登录！"),
     validate_error(500, "参数校验异常！");
 
     private final Integer code;

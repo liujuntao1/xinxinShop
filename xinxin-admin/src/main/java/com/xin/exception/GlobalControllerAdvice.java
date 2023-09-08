@@ -26,18 +26,18 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(SaTokenException.class)
     public CommonResult handler(SaTokenException e) {
         e.printStackTrace();
-        return CommonResult.error("用户权限认证失败！" + e.getMessage());
+        return CommonResult.error( e.getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
     public CommonResult handler(BusinessException e) {
         e.printStackTrace();
-        return CommonResult.error("业务异常！" + e.getMessage());
+        return CommonResult.error(e.getMessage());
     }
 
     @ExceptionHandler(GlobalException.class)
     public CommonResult handler(GlobalException e) {
         e.printStackTrace();
-        return CommonResult.error("系统异常！" + e.getMessage());
+        return CommonResult.error( e.getMessage());
     }
 }
