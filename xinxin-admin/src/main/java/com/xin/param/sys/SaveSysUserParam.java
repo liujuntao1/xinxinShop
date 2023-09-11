@@ -57,4 +57,10 @@ public class SaveSysUserParam {
     @ApiModelProperty("头像")
     private String avatar;
 
+    /**
+     * 状态
+     */
+    @ApiModelProperty("状态")
+    private Integer status;
+
 }

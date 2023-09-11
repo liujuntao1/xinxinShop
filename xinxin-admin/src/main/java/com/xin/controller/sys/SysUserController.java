@@ -51,7 +51,7 @@ public class SysUserController {
     private SysUserRoleMapper sysUserRoleMapper;
 
 
-    @Permission("sysuser.pageList")
+//    @Permission("sysuser.pageList")
     @LogOperation("用户分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
