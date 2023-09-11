@@ -9,6 +9,7 @@ import com.xin.enums.IsDeletedEnum;
 import com.xin.mapper.sys.SysMenuRoleMapper;
 import com.xin.mapper.sys.SysRoleMapper;
 import com.xin.param.sys.SaveSysMenuRoleParam;
+import com.xin.param.sys.SaveSysRoleParam;
 import com.xin.param.sys.SaveSysUserParam;
 import com.xin.utils.Asserts;
 import io.swagger.annotations.*;
@@ -88,9 +89,9 @@ public class SysRoleController {
     })
     @ApiOperation(value = "新增角色", response = JSONObject.class, notes = "新增角色")
     @PostMapping(path = "/insert")
-    public CommonResult<SysRole> insert(@RequestBody SaveSysUserParam saveSysUserParam) {
+    public CommonResult<SysRole> insert(@RequestBody SaveSysRoleParam saveSysRoleParam) {
         SysRole sysUser = new SysRole();
-        BeanUtils.copyProperties(saveSysUserParam, sysUser);
+        BeanUtils.copyProperties(saveSysRoleParam, sysUser);
         sysRoleMapper.insertSelective(sysUser);
         return CommonResult.success(sysUser);
     }
@@ -100,15 +101,15 @@ public class SysRoleController {
     })
     @ApiOperation(value = "修改角色", response = JSONObject.class, notes = "修改角色")
     @PostMapping(path = "/update")
-    public CommonResult<SysRole> update(@RequestBody SaveSysUserParam saveSysUserParam) {
-        if (saveSysUserParam.getId() == null) {
+    public CommonResult<SysRole> update(@RequestBody SaveSysRoleParam saveSysRoleParam) {
+        if (saveSysRoleParam.getId() == null) {
             Asserts.fail("未找到角色信息！");
         }
-        SysRole sysRole = sysRoleMapper.selectByPrimaryKey(saveSysUserParam.getId());
+        SysRole sysRole = sysRoleMapper.selectByPrimaryKey(saveSysRoleParam.getId());
         if (sysRole == null) {
             Asserts.fail("未找到角色信息！");
         }
-        BeanUtils.copyProperties(saveSysUserParam, sysRole);
+        BeanUtils.copyProperties(saveSysRoleParam, sysRole);
         sysRoleMapper.updateByPrimaryKeySelective(sysRole);
         return CommonResult.success(sysRole);
     }
@@ -117,7 +118,7 @@ public class SysRoleController {
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
     @ApiOperation(value = "删除单个角色", response = JSONObject.class, notes = "删除单个角色")
-    @PostMapping(path = "/deleteById")
+    @RequestMapping(path = "/deleteById",method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<SysRole> deleteById(@NotNull(message = "id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
         SysRole sysUser = sysRoleMapper.selectByPrimaryKey(id);
         if (sysUser == null) {
@@ -152,7 +153,7 @@ public class SysRoleController {
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
     @ApiOperation(value = "删除角色所有权限", response = JSONObject.class, notes = "删除角色所有权限")
-    @PostMapping(path = "/deleteRoleMenuByRoleId")
+    @RequestMapping(path = "/deleteRoleMenuByRoleId",method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<String> deleteRoleMenuByRoleId(@NotNull(message = "id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
         SysRole sysUser = sysRoleMapper.selectByPrimaryKey(id);
         if (sysUser == null) {

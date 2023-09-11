@@ -129,7 +129,7 @@ public class SysUserController {
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
     @ApiOperation(value = "删除单个用户", response = JSONObject.class, notes = "删除单个用户")
-    @PostMapping(path = "/deleteById")
+    @GetMapping(path = "/deleteById")
     public CommonResult<SysUser> deleteById(@NotNull(message = "id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
         SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
         if (sysUser == null) {
