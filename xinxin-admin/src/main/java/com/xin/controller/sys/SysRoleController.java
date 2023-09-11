@@ -10,7 +10,6 @@ import com.xin.mapper.sys.SysMenuRoleMapper;
 import com.xin.mapper.sys.SysRoleMapper;
 import com.xin.param.sys.SaveSysMenuRoleParam;
 import com.xin.param.sys.SaveSysRoleParam;
-import com.xin.param.sys.SaveSysUserParam;
 import com.xin.utils.Asserts;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
