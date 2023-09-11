@@ -5,11 +5,13 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import com.xin.api.CommonResult;
+import com.xin.dto.sys.LoginUserInfoDTO;
 import com.xin.entity.sys.SysUser;
 import com.xin.entity.sys.SysUserExample;
 import com.xin.enums.IsDeletedEnum;
 import com.xin.mapper.sys.SysUserMapper;
 import com.xin.param.sys.LoginParam;
+import com.xin.service.sys.LoginService;
 import com.xin.utils.Asserts;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +37,12 @@ public class LoginController {
 
 
     private SysUserMapper sysUserMapper;
+    private LoginService loginService;
 
     @Autowired
-    public void setSysUserMapper(SysUserMapper sysUserMapper) {
+    public void setSysUserMapper(SysUserMapper sysUserMapper, LoginService loginService) {
         this.sysUserMapper = sysUserMapper;
+        this.loginService = loginService;
     }
 
     @ApiResponses({
@@ -75,6 +79,15 @@ public class LoginController {
     @RequestMapping(path = "/isLogin", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<Boolean> isLogin(@ApiParam(name = "userId", value = "用户ID") @NotNull(message = "用户ID不能为空！") @RequestParam(name = "userId", required = false) Integer userId) {
         return CommonResult.success(StpUtil.isLogin(userId));
+    }
+
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = LoginUserInfoDTO.class),
+    })
+    @ApiOperation(value = "获取登录用户信息", response = JSONObject.class, notes = "获取登录用户信息")
+    @RequestMapping(path = "/getUserInfo", method = {RequestMethod.POST, RequestMethod.GET})
+    public CommonResult<LoginUserInfoDTO> getUserInfo() {
+        return CommonResult.success(loginService.getUserInfo());
     }
 
     @ApiResponses({
