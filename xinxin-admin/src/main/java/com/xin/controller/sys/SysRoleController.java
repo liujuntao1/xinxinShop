@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
+import com.xin.dto.sys.SysRoleListDTO;
 import com.xin.entity.sys.*;
 import com.xin.enums.IsDeletedEnum;
 import com.xin.mapper.sys.SysMenuRoleMapper;
@@ -22,7 +23,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: ljt
@@ -49,10 +52,10 @@ public class SysRoleController {
     })
     @ApiOperation(value = "角色分页列表", response = JSONObject.class, notes = "角色分页列表")
     @RequestMapping(path = "/pageList", method = {RequestMethod.POST, RequestMethod.GET})
-    public CommonResult<PageResult<SysRole>> pageList(@RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                                                      @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                                                      @RequestParam(name = "name", required = false) String name,
-                                                      @RequestParam(name = "code", required = false) String code) {
+    public CommonResult<PageResult<SysRoleListDTO>> pageList(@RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                                             @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                                                             @RequestParam(name = "name", required = false) String name,
+                                                             @RequestParam(name = "code", required = false) String code) {
         PageHelper.startPage(pageNum, pageSize);
         SysRoleExample sysRoleExample = new SysRoleExample();
         sysRoleExample.setOrderByClause("updated_time desc");
@@ -64,7 +67,24 @@ public class SysRoleController {
         if (StringUtils.isNotBlank(code)) {
             criteria.andCodeLike(StringUtils.join("%", code, "%"));
         }
-        return CommonResult.success(PageResult.convertPageResult(sysRoleMapper.selectByExample(sysRoleExample)));
+        PageResult<SysRole> sysRolePageResult = PageResult.convertPageResult(sysRoleMapper.selectByExample(sysRoleExample));
+        PageResult<SysRoleListDTO> dtoPageResult = new PageResult<>();
+        BeanUtils.copyProperties(sysRolePageResult, dtoPageResult);
+        List<SysRoleListDTO> dtoList = new ArrayList<>();
+        for (SysRole datum : sysRolePageResult.getData()) {
+            SysRoleListDTO sysRoleListDTO = new SysRoleListDTO();
+            BeanUtils.copyProperties(datum, sysRoleListDTO);
+
+            SysMenuRoleExample sysMenuRoleExample = new SysMenuRoleExample();
+            sysMenuRoleExample.createCriteria()
+                    .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                    .andRoleIdEqualTo(datum.getId());
+            List<Integer> menuIds = sysMenuRoleMapper.selectByExample(sysMenuRoleExample).stream().map(SysMenuRole::getMenuId).collect(Collectors.toList());
+            sysRoleListDTO.setMenuIds(menuIds);
+            dtoList.add(sysRoleListDTO);
+        }
+        dtoPageResult.setData(dtoList);
+        return CommonResult.success(dtoPageResult);
     }
 
     @LogOperation("角色管理-角色关联菜单")
@@ -77,7 +97,7 @@ public class SysRoleController {
     public CommonResult<String> insertRoleMenu(@RequestBody SaveSysMenuRoleParam saveSysMenuRoleParam) {
         //先删除角色的所有权限，然后在新增
         deleteRoleMenuByRoleId(saveSysMenuRoleParam.getRoleId());
-        for (Integer menuId : saveSysMenuRoleParam.getMenuId()) {
+        for (Integer menuId : saveSysMenuRoleParam.getMenuIds()) {
             SysMenuRole sysMenuRole = new SysMenuRole();
             sysMenuRole.setRoleId(saveSysMenuRoleParam.getRoleId());
             sysMenuRole.setMenuId(menuId);

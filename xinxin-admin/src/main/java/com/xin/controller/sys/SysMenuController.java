@@ -121,9 +121,12 @@ public class SysMenuController {
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })
     @ApiOperation(value = "查询全部菜单", response = JSONObject.class, notes = "查询全部菜单")
-    @PostMapping(path = "/list")
+    @RequestMapping(path = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<List<SysMenu>> list() {
-        return CommonResult.success(sysMenuMapper.selectByExample(new SysMenuExample()));
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue());
+        return CommonResult.success(sysMenuMapper.selectByExample(sysMenuExample));
     }
 
 }

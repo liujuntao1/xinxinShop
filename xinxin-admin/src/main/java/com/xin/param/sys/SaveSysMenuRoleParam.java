@@ -21,5 +21,5 @@ public class SaveSysMenuRoleParam {
     private Integer roleId;
     @NotNull(message = "菜单ID不能为空！")
     @ApiModelProperty(value = "菜单ID", example = "1001")
-    private List<Integer> menuId;
+    private List<Integer> menuIds;
 }
