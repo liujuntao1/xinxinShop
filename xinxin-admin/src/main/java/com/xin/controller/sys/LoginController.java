@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
+import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.dto.sys.LoginUserInfoDTO;
 import com.xin.entity.sys.SysUser;
@@ -45,6 +46,7 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+    @LogOperation("登录管理-登录接口")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
@@ -72,6 +74,7 @@ public class LoginController {
         return CommonResult.success("登录成功！");
     }
 
+    @LogOperation("登录管理-判断用户是否登录")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = Boolean.class),
     })
@@ -81,6 +84,8 @@ public class LoginController {
         return CommonResult.success(StpUtil.isLogin(userId));
     }
 
+
+    @LogOperation("登录管理-获取登录用户信息")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = LoginUserInfoDTO.class),
     })
@@ -90,6 +95,8 @@ public class LoginController {
         return CommonResult.success(loginService.getUserInfo());
     }
 
+
+    @LogOperation("登录管理-退出登录")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = Boolean.class),
     })

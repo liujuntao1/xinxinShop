@@ -2,6 +2,7 @@ package com.xin.controller.sys;
 
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.*;
@@ -42,6 +43,7 @@ public class SysRoleController {
     @Autowired
     private SysMenuRoleMapper sysMenuRoleMapper;
 
+    @LogOperation("角色管理-角色分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
@@ -65,6 +67,7 @@ public class SysRoleController {
         return CommonResult.success(PageResult.convertPageResult(sysRoleMapper.selectByExample(sysRoleExample)));
     }
 
+    @LogOperation("角色管理-角色关联菜单")
     @Transactional(rollbackFor = Exception.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class),
@@ -83,6 +86,7 @@ public class SysRoleController {
         return CommonResult.success("添加成功");
     }
 
+    @LogOperation("角色管理-新增角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
@@ -95,6 +99,7 @@ public class SysRoleController {
         return CommonResult.success(sysUser);
     }
 
+    @LogOperation("角色管理-修改角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
@@ -112,7 +117,7 @@ public class SysRoleController {
         sysRoleMapper.updateByPrimaryKeySelective(sysRole);
         return CommonResult.success(sysRole);
     }
-
+    @LogOperation("角色管理-删除单个角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
@@ -130,7 +135,7 @@ public class SysRoleController {
         sysRoleMapper.updateByPrimaryKeySelective(sysUser);
         return CommonResult.success(sysUser);
     }
-
+    @LogOperation("角色管理-查询角色关联的菜单")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
@@ -148,6 +153,7 @@ public class SysRoleController {
         return CommonResult.success(PageResult.convertPageResult(sysMenuRoleMapper.selectByExample(sysMenuRoleExample)));
     }
 
+    @LogOperation("角色管理-删除角色所有权限")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
@@ -168,6 +174,7 @@ public class SysRoleController {
     }
 
 
+    @LogOperation("角色管理-查询全部角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })

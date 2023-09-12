@@ -4,7 +4,6 @@ import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.xin.annotation.LogOperation;
-import com.xin.annotation.Permission;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.SysUser;
@@ -51,8 +50,8 @@ public class SysUserController {
     private SysUserRoleMapper sysUserRoleMapper;
 
 
-//    @Permission("sysuser.pageList")
-    @LogOperation("用户分页列表")
+    //    @Permission("sysuser.pageList")
+    @LogOperation("用户管理-用户分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -77,7 +76,8 @@ public class SysUserController {
         return CommonResult.success(sysUserPageResult);
     }
 
-    @LogOperation("新增用户角色")
+
+    @LogOperation("用户管理-新增用户角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUserRole.class),
     })
@@ -91,7 +91,7 @@ public class SysUserController {
         return CommonResult.success(sysUserRole);
     }
 
-    @LogOperation("新增用户")
+    @LogOperation("用户管理-新增用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -105,7 +105,7 @@ public class SysUserController {
         return CommonResult.success(sysUser);
     }
 
-    @LogOperation("修改用户")
+    @LogOperation("用户管理-修改用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -124,7 +124,7 @@ public class SysUserController {
         return CommonResult.success(sysUser);
     }
 
-    @LogOperation("删除单个用户")
+    @LogOperation("用户管理-删除单个用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
@@ -142,7 +142,7 @@ public class SysUserController {
         return CommonResult.success(sysUser);
     }
 
-    @LogOperation("清空用户角色")
+    @LogOperation("用户管理-清空用户角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
@@ -158,7 +158,7 @@ public class SysUserController {
         return CommonResult.success("操作成功！");
     }
 
-    @LogOperation("查询用户关联的角色")
+    @LogOperation("用户管理-查询用户关联的角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUserRole.class),
     })
@@ -174,7 +174,8 @@ public class SysUserController {
         return CommonResult.success(sysUserRoles);
     }
 
-    @LogOperation("查询全部用户")
+
+    @LogOperation("用户管理-查询全部用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })

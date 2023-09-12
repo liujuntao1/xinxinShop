@@ -2,6 +2,7 @@ package com.xin.controller.sys;
 
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.SysMenu;
@@ -41,6 +42,7 @@ public class SysMenuController {
     private SysMenuMapper sysMenuMapper;
 
 
+    @LogOperation("菜单管理-菜单分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })
@@ -65,6 +67,7 @@ public class SysMenuController {
         return CommonResult.success(sysMenuPageResult);
     }
 
+    @LogOperation("菜单管理-新增菜单")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })
@@ -77,6 +80,7 @@ public class SysMenuController {
         return CommonResult.success(sysMenu);
     }
 
+    @LogOperation("菜单管理-修改菜单")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })
@@ -95,6 +99,7 @@ public class SysMenuController {
         return CommonResult.success(sysMenu);
     }
 
+    @LogOperation("菜单管理-删除单个菜单")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })
@@ -111,6 +116,7 @@ public class SysMenuController {
         return CommonResult.success(sysMenu);
     }
 
+    @LogOperation("菜单管理-查询全部菜单")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })

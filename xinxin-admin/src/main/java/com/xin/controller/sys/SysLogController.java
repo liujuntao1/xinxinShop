@@ -2,6 +2,7 @@ package com.xin.controller.sys;
 
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.entity.sys.SysLog;
@@ -37,6 +38,7 @@ public class SysLogController {
     private SysLogMapper sysLogMapper;
 
 
+    @LogOperation("日志管理-日志分页列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysLog.class),
     })
@@ -60,6 +62,7 @@ public class SysLogController {
         return CommonResult.success(PageResult.convertPageResult(sysLogMapper.selectByExample(sysLogExample)));
     }
 
+    @LogOperation("日志管理-查询全部日志")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysLog.class),
     })
