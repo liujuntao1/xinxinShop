@@ -135,6 +135,9 @@ public class SysUserController {
         if (sysUser == null) {
             Asserts.fail("未找到用户信息！");
         }
+        if (sysUser.getUserName().equals("admin")) {
+            Asserts.fail("无法删除admin用户！");
+        }
         deleteUserRoleById(id);
         //这里做一个假删除，然后修改
         sysUser.setIsDeleted(IsDeletedEnum.Deleted.getValue());
