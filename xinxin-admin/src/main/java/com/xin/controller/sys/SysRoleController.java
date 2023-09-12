@@ -94,7 +94,7 @@ public class SysRoleController {
     })
     @ApiOperation(value = "角色关联菜单", response = JSONObject.class, notes = "角色关联菜单")
     @PostMapping(path = "/insertRoleMenu")
-    public CommonResult<String> insertRoleMenu(@RequestBody SaveSysMenuRoleParam saveSysMenuRoleParam) {
+    public CommonResult<String> insertRoleMenu(@Validated @RequestBody SaveSysMenuRoleParam saveSysMenuRoleParam) {
         //先删除角色的所有权限，然后在新增
         deleteRoleMenuByRoleId(saveSysMenuRoleParam.getRoleId());
         for (Integer menuId : saveSysMenuRoleParam.getMenuIds()) {
