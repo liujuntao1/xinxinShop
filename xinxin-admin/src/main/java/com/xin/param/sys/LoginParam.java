@@ -24,6 +24,7 @@ public class LoginParam {
     private String passWord;
 
     @ApiModelProperty("验证码")
-    @NotNull(message = "验证码不能为空！")
+    //TODO 待开发完之后，取消注释
+//    @NotNull(message = "验证码不能为空！")
     private String verificationCode;
 }

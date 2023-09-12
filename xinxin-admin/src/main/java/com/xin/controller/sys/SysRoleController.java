@@ -117,12 +117,13 @@ public class SysRoleController {
         sysRoleMapper.updateByPrimaryKeySelective(sysRole);
         return CommonResult.success(sysRole);
     }
+
     @LogOperation("角色管理-删除单个角色")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
     })
     @ApiOperation(value = "删除单个角色", response = JSONObject.class, notes = "删除单个角色")
-    @RequestMapping(path = "/deleteById",method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(path = "/deleteById", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<SysRole> deleteById(@NotNull(message = "id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
         SysRole sysUser = sysRoleMapper.selectByPrimaryKey(id);
         if (sysUser == null) {
@@ -135,6 +136,7 @@ public class SysRoleController {
         sysRoleMapper.updateByPrimaryKeySelective(sysUser);
         return CommonResult.success(sysUser);
     }
+
     @LogOperation("角色管理-查询角色关联的菜单")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysRole.class),
@@ -158,7 +160,7 @@ public class SysRoleController {
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
     @ApiOperation(value = "删除角色所有权限", response = JSONObject.class, notes = "删除角色所有权限")
-    @RequestMapping(path = "/deleteRoleMenuByRoleId",method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(path = "/deleteRoleMenuByRoleId", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<String> deleteRoleMenuByRoleId(@NotNull(message = "id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
         SysRole sysUser = sysRoleMapper.selectByPrimaryKey(id);
         if (sysUser == null) {
@@ -179,9 +181,12 @@ public class SysRoleController {
             @ApiResponse(code = 200, message = "OK", response = SysUser.class),
     })
     @ApiOperation(value = "查询全部角色", response = JSONObject.class, notes = "查询全部角色")
-    @PostMapping(path = "/list")
+    @RequestMapping(path = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<List<SysRole>> list() {
-        return CommonResult.success(sysRoleMapper.selectByExample(new SysRoleExample()));
+        SysRoleExample sysRoleExample = new SysRoleExample();
+        sysRoleExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue());
+        return CommonResult.success(sysRoleMapper.selectByExample(sysRoleExample));
     }
 
 }

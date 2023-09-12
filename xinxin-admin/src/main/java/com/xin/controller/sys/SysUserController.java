@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
+import com.xin.dto.sys.SysUserListDTO;
 import com.xin.entity.sys.SysUser;
 import com.xin.entity.sys.SysUserExample;
 import com.xin.entity.sys.SysUserRole;
@@ -28,7 +29,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: ljt
@@ -57,10 +60,10 @@ public class SysUserController {
     })
     @ApiOperation(value = "用户分页列表", response = JSONObject.class, notes = "用户分页列表")
     @RequestMapping(path = "/pageList", method = {RequestMethod.POST, RequestMethod.GET})
-    public CommonResult<PageResult<SysUser>> pageList(@RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                                                      @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                                                      @RequestParam(name = "userName", required = false) String userName,
-                                                      @RequestParam(name = "phone", required = false) String phone) {
+    public CommonResult<PageResult<SysUserListDTO>> pageList(@RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                                             @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                                                             @RequestParam(name = "userName", required = false) String userName,
+                                                             @RequestParam(name = "phone", required = false) String phone) {
         PageHelper.startPage(pageNum, pageSize);
         SysUserExample sysUserExample = new SysUserExample();
         sysUserExample.setOrderByClause("updated_time desc");
@@ -73,22 +76,41 @@ public class SysUserController {
             criteria.andPhoneLike(StringUtils.join("%", phone, "%"));
         }
         PageResult<SysUser> sysUserPageResult = PageResult.convertPageResult(sysUserMapper.selectByExample(sysUserExample));
-        return CommonResult.success(sysUserPageResult);
+        PageResult<SysUserListDTO> dtoPageResult = new PageResult<>();
+        BeanUtils.copyProperties(sysUserPageResult, dtoPageResult);
+        List<SysUserListDTO> dtoList = new ArrayList<>();
+        for (SysUser sysUser : sysUserPageResult.getData()) {
+            SysUserListDTO sysUserListDTO = new SysUserListDTO();
+            BeanUtils.copyProperties(sysUser, sysUserListDTO);
+
+            SysUserRoleExample sysUserRoleExample = new SysUserRoleExample();
+            sysUserRoleExample.createCriteria()
+                    .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                    .andUserIdEqualTo(sysUser.getId());
+            List<Integer> roleIds = sysUserRoleMapper.selectByExample(sysUserRoleExample).stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+            sysUserListDTO.setRoleIds(roleIds);
+            dtoList.add(sysUserListDTO);
+        }
+        dtoPageResult.setData(dtoList);
+        return CommonResult.success(dtoPageResult);
     }
 
 
     @LogOperation("用户管理-新增用户角色")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK", response = SysUserRole.class),
+            @ApiResponse(code = 200, message = "OK", response = String.class),
     })
     @ApiOperation(value = "新增用户角色", response = JSONObject.class, notes = "新增用户角色")
     @PostMapping(path = "/insertUserRole")
-    public CommonResult<SysUserRole> insertUserRole(@RequestBody SaveSysUserRoleParam saveSysUserParam) {
+    public CommonResult<String> insertUserRole(@RequestBody SaveSysUserRoleParam saveSysUserParam) {
         deleteUserRoleById(saveSysUserParam.getUserId());
-        SysUserRole sysUserRole = new SysUserRole();
-        BeanUtils.copyProperties(saveSysUserParam, sysUserRole);
-        sysUserRoleMapper.insertSelective(sysUserRole);
-        return CommonResult.success(sysUserRole);
+        for (Integer roleId : saveSysUserParam.getRoleIds()) {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setRoleId(roleId);
+            sysUserRole.setUserId(saveSysUserParam.getUserId());
+            sysUserRoleMapper.insertSelective(sysUserRole);
+        }
+        return CommonResult.success("操作成功!");
     }
 
     @LogOperation("用户管理-新增用户")
