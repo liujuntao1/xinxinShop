@@ -46,13 +46,16 @@ public class LogOperationAspect {
         LogOperation annotation = signature.getMethod().getAnnotation(LogOperation.class);
         sysLog.setLogContent(annotation.value());
         sysLog.setLogType(LogTypeEnums.operation_log.getValue());
-        int loginId = StpUtil.getLoginIdAsInt();
-        SysUser sysUser = sysUserMapper.selectByPrimaryKey(loginId);
-        if (sysUser != null) {
-            //获取登录用户id、用户名、
-            sysLog.setUserId(sysUser.getId());
-            sysLog.setUserName(sysUser.getUserName());
+        if (StpUtil.isLogin()) {
+            Integer loginId = StpUtil.getLoginIdAsInt();
+            SysUser sysUser = sysUserMapper.selectByPrimaryKey(loginId);
+            if (sysUser != null) {
+                //获取登录用户id、用户名、
+                sysLog.setUserId(sysUser.getId());
+                sysLog.setUserName(sysUser.getUserName());
+            }
         }
+        //TODO 这里需要获取请求的路径和参数，保存到日志中
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 获取操作ip
         sysLog.setOperationIp(IPUtils.getIpAddr(request));
