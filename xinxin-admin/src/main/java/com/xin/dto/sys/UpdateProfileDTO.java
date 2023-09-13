@@ -13,11 +13,6 @@ import lombok.Data;
 @ApiModel("修改个人信息实体类")
 public class UpdateProfileDTO {
     /**
-     * 主键
-     */
-    private Integer id;
-
-    /**
      * 昵称
      */
     private String nickName;

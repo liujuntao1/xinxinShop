@@ -12,10 +12,6 @@ import lombok.Data;
 @Data
 @ApiModel("修改密码实体类")
 public class UpdateProfilePwdDTO {
-    /**
-     * 主键
-     */
-    private Integer id;
 
     /**
      * 旧密码
