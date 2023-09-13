@@ -61,8 +61,8 @@ public class ProfileController {
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
     @ApiOperation(value = "修改密码", response = JSONObject.class, notes = "修改密码")
-    @RequestMapping(path = "/updateProfile", method = {RequestMethod.POST, RequestMethod.GET})
-    public CommonResult<String> updateProfile(@Validated @NotNull(message = "修改密码实体类不能为空！") @RequestBody UpdateProfilePwdDTO updateProfilePwdDTO) {
+    @RequestMapping(path = "/updatePwd", method = {RequestMethod.POST, RequestMethod.GET})
+    public CommonResult<String> updatePwd(@Validated @NotNull(message = "修改密码实体类不能为空！") @RequestBody UpdateProfilePwdDTO updateProfilePwdDTO) {
         SysUser sysUser = sysUserMapper.selectByPrimaryKey(updateProfilePwdDTO.getId());
         if (sysUser == null) {
             Asserts.fail("未找到用户信息！");
