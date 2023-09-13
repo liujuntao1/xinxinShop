@@ -131,6 +131,31 @@ public class SysMenuController {
         return CommonResult.success(sysMenuMapper.selectByExample(sysMenuExample));
     }
 
+    @LogOperation("菜单管理-获取分页菜单树")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = SysMenuTreeDTO.class),
+    })
+    @ApiOperation(value = "获取分页菜单树", response = JSONObject.class, notes = "获取菜单树")
+    @RequestMapping(path = "/pageTreeList", method = {RequestMethod.POST, RequestMethod.GET})
+    public CommonResult<PageResult<SysMenuTreeDTO>> pageTreeList() {
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                .andParentIdIsNull();
+        PageResult<SysMenu> sysMenuPageResult = PageResult.convertPageResult(sysMenuMapper.selectByExample(sysMenuExample));
+        PageResult<SysMenuTreeDTO> dtoPageResult = new PageResult<>();
+        BeanUtils.copyProperties(sysMenuPageResult, dtoPageResult);
+        List<SysMenuTreeDTO> dtoList = new ArrayList<>();
+        for (SysMenu sysMenu : sysMenuPageResult.getData()) {
+            SysMenuTreeDTO sysMenuTreeDTO = new SysMenuTreeDTO();
+            BeanUtils.copyProperties(sysMenu, sysMenuTreeDTO);
+            sysMenuTreeDTO.setChildren(getChildMenu(sysMenuTreeDTO.getId()));
+            dtoList.add(sysMenuTreeDTO);
+        }
+        dtoPageResult.setData(dtoList);
+        return CommonResult.success(dtoPageResult);
+    }
+
     @LogOperation("菜单管理-获取菜单树")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = SysMenuTreeDTO.class),
@@ -155,6 +180,7 @@ public class SysMenuController {
 
     /**
      * 递归获取子级
+     *
      * @param parentId
      * @return
      */
