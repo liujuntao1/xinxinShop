@@ -7,6 +7,7 @@ import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
 import com.xin.dto.sys.SysUserListDTO;
+import com.xin.dto.sys.UpdateUserPwdDTO;
 import com.xin.entity.sys.SysUser;
 import com.xin.entity.sys.SysUserExample;
 import com.xin.entity.sys.SysUserRole;
@@ -210,4 +211,27 @@ public class SysUserController {
         return CommonResult.success(sysUserMapper.selectByExample(new SysUserExample()));
     }
 
+    @LogOperation("用户管理-管理员修改用户密码")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = String.class),
+    })
+    @ApiOperation(value = "管理员修改用户密码", response = JSONObject.class, notes = "管理员修改用户密码")
+    @PostMapping(path = "/updateUserPwd")
+    public CommonResult<String> updateUserPwd(@Validated @NotNull(message = "修改用户密码对象不能为空！") @RequestBody UpdateUserPwdDTO updateUserPwdDTO) {
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(updateUserPwdDTO.getUserId());
+        if (sysUser == null) {
+            Asserts.fail("用户未找到！");
+        }
+        //TODO 新增密码策略管理表，查询密码是否符合密码策略
+        if (updateUserPwdDTO.getPwd().length() < 6) {
+            Asserts.fail("密码长度不能小于6位！");
+        }
+        String newpwd = MD5.create().digestHex(updateUserPwdDTO.getPwd());
+        if (sysUser.getPwd().equals(newpwd)) {
+            Asserts.fail("新密码与旧密码重复！");
+        }
+        sysUser.setPwd(newpwd);
+        sysUserMapper.updateByPrimaryKeySelective(sysUser);
+        return CommonResult.success("操作成功！");
+    }
 }
