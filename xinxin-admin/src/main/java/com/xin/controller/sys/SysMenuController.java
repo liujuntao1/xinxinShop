@@ -106,12 +106,13 @@ public class SysMenuController {
             @ApiResponse(code = 200, message = "OK", response = SysMenu.class),
     })
     @ApiOperation(value = "删除单个菜单", response = JSONObject.class, notes = "删除单个菜单")
-    @PostMapping(path = "/deleteById")
+    @RequestMapping(path = "/deleteById", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult<SysMenu> deleteById(@NotNull(message = "id不能为空！") @RequestParam(name = "id", required = false) Integer id) {
         SysMenu sysMenu = sysMenuMapper.selectByPrimaryKey(id);
         if (sysMenu == null) {
             Asserts.fail("未找到菜单信息！");
         }
+        //TODO  删除先判断是否关联角色，将子级菜单全部删除
         //这里做一个假删除，然后修改
         sysMenu.setIsDeleted(IsDeletedEnum.Deleted.getValue());
         sysMenuMapper.updateByPrimaryKeySelective(sysMenu);
@@ -139,6 +140,7 @@ public class SysMenuController {
     @RequestMapping(path = "/pageTreeList", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<PageResult<SysMenuTreeDTO>> pageTreeList() {
         SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.setOrderByClause("created_time desc");
         sysMenuExample.createCriteria()
                 .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
                 .andParentIdIsNull();
