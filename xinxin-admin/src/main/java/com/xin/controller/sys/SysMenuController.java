@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
+import com.xin.dto.sys.SysMenuTreeDTO;
 import com.xin.entity.sys.SysMenu;
 import com.xin.entity.sys.SysMenuExample;
 import com.xin.enums.IsDeletedEnum;
@@ -23,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -127,6 +129,51 @@ public class SysMenuController {
         sysMenuExample.createCriteria()
                 .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue());
         return CommonResult.success(sysMenuMapper.selectByExample(sysMenuExample));
+    }
+
+    @LogOperation("菜单管理-获取菜单树")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = SysMenuTreeDTO.class),
+    })
+    @ApiOperation(value = "获取菜单树", response = JSONObject.class, notes = "获取菜单树")
+    @RequestMapping(path = "/treeList", method = {RequestMethod.POST, RequestMethod.GET})
+    public CommonResult<List<SysMenuTreeDTO>> treeList() {
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                .andParentIdIsNull();
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        List<SysMenuTreeDTO> dtoList = new ArrayList<>();
+        for (SysMenu sysMenu : sysMenus) {
+            SysMenuTreeDTO sysMenuTreeDTO = new SysMenuTreeDTO();
+            BeanUtils.copyProperties(sysMenu, sysMenuTreeDTO);
+            sysMenuTreeDTO.setChildren(getChildMenu(sysMenuTreeDTO.getId()));
+            dtoList.add(sysMenuTreeDTO);
+        }
+        return CommonResult.success(dtoList);
+    }
+
+    /**
+     * 递归获取子级
+     * @param parentId
+     * @return
+     */
+    public List<SysMenuTreeDTO> getChildMenu(Integer parentId) {
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                .andParentIdEqualTo(parentId);
+        // 获取子级菜单项
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        List<SysMenuTreeDTO> childMenuItems = new ArrayList<>();
+        for (SysMenu menuItem : sysMenus) {
+            SysMenuTreeDTO sysMenuTreeDTO = new SysMenuTreeDTO();
+            BeanUtils.copyProperties(menuItem, sysMenuTreeDTO);
+            // 递归获取子级菜单项
+            sysMenuTreeDTO.setChildren(getChildMenu(sysMenuTreeDTO.getId()));
+            childMenuItems.add(sysMenuTreeDTO);
+        }
+        return childMenuItems;
     }
 
 }
