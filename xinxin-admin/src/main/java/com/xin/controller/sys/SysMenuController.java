@@ -13,6 +13,7 @@ import com.xin.enums.IsDeletedEnum;
 import com.xin.enums.MenuTypeEnum;
 import com.xin.mapper.sys.SysMenuMapper;
 import com.xin.param.sys.SaveSysMenuParam;
+import com.xin.service.sys.LoginService;
 import com.xin.utils.Asserts;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @Author: ljt
@@ -44,7 +47,8 @@ public class SysMenuController {
 
     @Autowired
     private SysMenuMapper sysMenuMapper;
-
+    @Autowired
+    private LoginService loginService;
 
     @LogOperation("菜单管理-菜单分页列表")
     @ApiResponses({
@@ -189,61 +193,41 @@ public class SysMenuController {
     @ApiOperation(value = "获取菜单路由列表", response = JSONObject.class, notes = "获取菜单路由列表")
     @RequestMapping(path = "/menuRouterList", method = {RequestMethod.POST, RequestMethod.GET})
     public CommonResult<List<SysMenuRouterDTO>> menuRouterList() {
-        //不查询按钮级别的菜单
-        SysMenuExample sysMenuExample = new SysMenuExample();
-        sysMenuExample.createCriteria()
-                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
-                .andTypeNotEqualTo(MenuTypeEnum.button.getValue())
-                .andParentIdIsNull();
-        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
-        List<SysMenuRouterDTO> dtoList = new ArrayList<>();
-        for (SysMenu sysMenu : sysMenus) {
-            SysMenuRouterDTO sysMenuRouterDTO = new SysMenuRouterDTO();
-            //判断是否是一级菜单
-            if (sysMenu.getType().equals(MenuTypeEnum.module.getValue())) {
-                sysMenuRouterDTO.setComponent("Layout");
-                sysMenuRouterDTO.setAlwaysShow(true);
-            } else {
-                sysMenuRouterDTO.setComponent(sysMenu.getUrl());
-                sysMenuRouterDTO.setAlwaysShow(false);
-            }
-            sysMenuRouterDTO.setName(sysMenu.getCode());//菜单编码
-            sysMenuRouterDTO.setRedirect(sysMenu.getUrl());//重定向地址
-            sysMenuRouterDTO.setPath(sysMenu.getUrl());//重定向地址
-            sysMenuRouterDTO.setMeta(new SysMenuRouterDTO.Meta(sysMenu.getName(), sysMenu.getIcon()));//标题、icon
-            sysMenuRouterDTO.setChildren(getSysMenuRouterDTOChildMenu(sysMenu.getId())); //递归查询子级
-            dtoList.add(sysMenuRouterDTO);
-        }
-        return CommonResult.success(dtoList);
+        //查询用户所有拥有的菜单列表
+        List<SysMenu> menuList = loginService.getUserInfo().getMenus().stream()
+                .filter(item -> !item.getType().equals(MenuTypeEnum.button.getValue())).collect(Collectors.toList());
+        return CommonResult.success(getSysMenuRouterDTOChildMenu(menuList, null));
     }
 
     /**
-     * 递归获取子级
-     * TODO getSysMenuRouterDTOChildMenu() getChildMenu()  使用反射+泛型方式，将方法封装
+     * 生成前端的路由菜单
      *
+     * @param menuList
      * @param parentId
      * @return
      */
-    public List<SysMenuRouterDTO> getSysMenuRouterDTOChildMenu(Integer parentId) {
-        SysMenuExample sysMenuExample = new SysMenuExample();
-        sysMenuExample.createCriteria()
-                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
-                .andTypeNotEqualTo(MenuTypeEnum.button.getValue())
-                .andParentIdEqualTo(parentId);
-        // 获取子级菜单项
-        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
-        List<SysMenuRouterDTO> childMenuItems = new ArrayList<>();
-        for (SysMenu menuItem : sysMenus) {
-            SysMenuRouterDTO sysMenuRouterDTO = new SysMenuRouterDTO();
-            sysMenuRouterDTO.setName(menuItem.getCode());
-            sysMenuRouterDTO.setPath(menuItem.getUrl());
-            sysMenuRouterDTO.setComponent(menuItem.getUrl());
-            sysMenuRouterDTO.setRedirect(menuItem.getUrl());
-            sysMenuRouterDTO.setMeta(new SysMenuRouterDTO.Meta(menuItem.getName(), menuItem.getIcon()));
-            sysMenuRouterDTO.setChildren(getSysMenuRouterDTOChildMenu(menuItem.getId()));
-            childMenuItems.add(sysMenuRouterDTO);
-        }
-        return childMenuItems;
+    public List<SysMenuRouterDTO> getSysMenuRouterDTOChildMenu(List<SysMenu> menuList, Integer parentId) {
+        List<SysMenuRouterDTO> dtoList = new ArrayList<>();
+        Optional.ofNullable(menuList).orElse(new ArrayList<>()).stream()
+                .filter(item -> item != null && item.getParentId() == parentId)
+                .forEach(item -> {
+                    SysMenuRouterDTO sysMenuRouterDTO = new SysMenuRouterDTO();
+                    //判断是否是一级菜单
+                    if (item.getType().equals(MenuTypeEnum.module.getValue())) {
+                        sysMenuRouterDTO.setComponent("Layout");
+                        sysMenuRouterDTO.setAlwaysShow(true);
+                    } else {
+                        sysMenuRouterDTO.setComponent(item.getUrl());
+                        sysMenuRouterDTO.setAlwaysShow(false);
+                    }
+                    sysMenuRouterDTO.setName(item.getCode());//菜单编码
+                    sysMenuRouterDTO.setRedirect(item.getUrl());//重定向地址
+                    sysMenuRouterDTO.setPath(item.getUrl());//重定向地址
+                    sysMenuRouterDTO.setMeta(new SysMenuRouterDTO.Meta(item.getName(), item.getIcon()));//标题、icon
+                    sysMenuRouterDTO.setChildren(getSysMenuRouterDTOChildMenu(menuList, item.getId())); //递归查询子级
+                    dtoList.add(sysMenuRouterDTO);
+                });
+        return dtoList;
     }
 
     /**
