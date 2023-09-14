@@ -216,12 +216,12 @@ public class SysMenuController {
                     if (item.getType().equals(MenuTypeEnum.module.getValue())) {
                         sysMenuRouterDTO.setComponent("Layout");
                         sysMenuRouterDTO.setAlwaysShow(true);
+                        sysMenuRouterDTO.setRedirect(item.getUrl());//重定向地址
                     } else {
                         sysMenuRouterDTO.setComponent(item.getUrl());
                         sysMenuRouterDTO.setAlwaysShow(false);
                     }
                     sysMenuRouterDTO.setName(item.getCode());//菜单编码
-                    sysMenuRouterDTO.setRedirect(item.getUrl());//重定向地址
                     sysMenuRouterDTO.setPath(item.getUrl());//重定向地址
                     sysMenuRouterDTO.setMeta(new SysMenuRouterDTO.Meta(item.getName(), item.getIcon()));//标题、icon
                     sysMenuRouterDTO.setChildren(getSysMenuRouterDTOChildMenu(menuList, item.getId())); //递归查询子级
