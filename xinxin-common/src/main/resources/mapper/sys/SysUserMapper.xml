@@ -8,7 +8,11 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
     <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -73,8 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, nick_name, user_name, phone, email, avatar, `status`, pwd, is_deleted, created_time,
-    updated_time
+    id, nick_name, user_name, phone, email, avatar, birthday, sex, `status`, description,
+    address, pwd, is_deleted, created_time, updated_time
   </sql>
   <select id="selectByExample" parameterType="com.xin.entity.sys.SysUserExample" resultMap="BaseResultMap">
     select
@@ -116,13 +120,15 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysUser" useGeneratedKeys="true">
     insert into sys_user (nick_name, user_name, phone,
-      email, avatar, `status`,
-      pwd, is_deleted, created_time,
-      updated_time)
+      email, avatar, birthday,
+      sex, `status`, description,
+      address, pwd, is_deleted,
+      created_time, updated_time)
     values (#{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-      #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
-      #{pwd,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP},
-      #{updatedTime,jdbcType=TIMESTAMP})
+      #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP},
+      #{sex,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER},
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.entity.sys.SysUser" useGeneratedKeys="true">
     insert into sys_user
@@ -142,8 +148,20 @@
       <if test="avatar != null">
         avatar,
       </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
       <if test="status != null">
         `status`,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="address != null">
+        address,
       </if>
       <if test="pwd != null">
         pwd,
@@ -174,8 +192,20 @@
       <if test="avatar != null">
         #{avatar,jdbcType=VARCHAR},
       </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="pwd != null">
         #{pwd,jdbcType=VARCHAR},
@@ -218,8 +248,20 @@
       <if test="record.avatar != null">
         avatar = #{record.avatar,jdbcType=VARCHAR},
       </if>
+      <if test="record.birthday != null">
+        birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
       <if test="record.pwd != null">
         pwd = #{record.pwd,jdbcType=VARCHAR},
@@ -246,7 +288,11 @@
       phone = #{record.phone,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
+      birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      sex = #{record.sex,jdbcType=INTEGER},
       `status` = #{record.status,jdbcType=INTEGER},
+      description = #{record.description,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
       pwd = #{record.pwd,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=INTEGER},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -273,8 +319,20 @@
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
       </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="pwd != null">
         pwd = #{pwd,jdbcType=VARCHAR},
@@ -298,7 +356,11 @@
       phone = #{phone,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=INTEGER},
       `status` = #{status,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

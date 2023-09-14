@@ -1,11 +1,11 @@
 package com.xin.entity.sys;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
+ * 系统用户表
  * sys_user
  */
 @Data
@@ -41,9 +41,29 @@ public class SysUser implements Serializable {
     private String avatar;
 
     /**
+     * 生日
+     */
+    private Date birthday;
+
+    /**
+     * 性别（1：男2：女3：未知）
+     */
+    private Integer sex;
+
+    /**
      * 用户状态（1：启用0:禁用）
      */
     private Integer status;
+
+    /**
+     * 个人描述
+     */
+    private String description;
+
+    /**
+     * 住址
+     */
+    private String address;
 
     /**
      * 密码

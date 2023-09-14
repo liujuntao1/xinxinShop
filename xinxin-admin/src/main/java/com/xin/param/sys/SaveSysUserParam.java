@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @Author: ljt
@@ -62,5 +63,28 @@ public class SaveSysUserParam {
      */
     @ApiModelProperty("状态")
     private Integer status;
+    /**
+     * 生日
+     */
+    @ApiModelProperty("生日")
+    private Date birthday;
+
+    /**
+     * 性别（1：男2：女3：未知）
+     */
+    @ApiModelProperty("性别")
+    private Integer sex;
+
+    /**
+     * 个人描述
+     */
+    @ApiModelProperty("个人描述")
+    private String description;
+
+    /**
+     * 住址
+     */
+    @ApiModelProperty("住址")
+    private String address;
 
 }
