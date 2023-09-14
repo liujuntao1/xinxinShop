@@ -24,6 +24,11 @@ public class SaveSysMenuParam {
 
     @ApiModelProperty(value = "菜单地址")
     private String url;
+    /**
+     * 菜单类型（0：一级菜单1：二级菜单2：按钮）
+     */
+    @ApiModelProperty(value = "菜单类型（0：一级菜单1：二级菜单2：按钮）")
+    private Integer type;
 
     @ApiModelProperty(value = "菜单图标")
     private String icon;

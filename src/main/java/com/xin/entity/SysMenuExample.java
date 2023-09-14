@@ -1,4 +1,4 @@
-package com.xin.entity.sys;
+package com.xin.entity;
 
 import java.util.ArrayList;
 import java.util.Date;

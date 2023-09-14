@@ -5,10 +5,12 @@ import com.github.pagehelper.PageHelper;
 import com.xin.annotation.LogOperation;
 import com.xin.api.CommonResult;
 import com.xin.api.PageResult;
+import com.xin.dto.sys.SysMenuRouterDTO;
 import com.xin.dto.sys.SysMenuTreeDTO;
 import com.xin.entity.sys.SysMenu;
 import com.xin.entity.sys.SysMenuExample;
 import com.xin.enums.IsDeletedEnum;
+import com.xin.enums.MenuTypeEnum;
 import com.xin.mapper.sys.SysMenuMapper;
 import com.xin.param.sys.SaveSysMenuParam;
 import com.xin.utils.Asserts;
@@ -178,6 +180,70 @@ public class SysMenuController {
             dtoList.add(sysMenuTreeDTO);
         }
         return CommonResult.success(dtoList);
+    }
+
+    @LogOperation("菜单管理-获取菜单路由列表")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = SysMenuRouterDTO.class),
+    })
+    @ApiOperation(value = "获取菜单路由列表", response = JSONObject.class, notes = "获取菜单路由列表")
+    @RequestMapping(path = "/menuRouterList", method = {RequestMethod.POST, RequestMethod.GET})
+    public CommonResult<List<SysMenuRouterDTO>> menuRouterList() {
+        //不查询按钮级别的菜单
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                .andTypeNotEqualTo(MenuTypeEnum.button.getValue())
+                .andParentIdIsNull();
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        List<SysMenuRouterDTO> dtoList = new ArrayList<>();
+        for (SysMenu sysMenu : sysMenus) {
+            SysMenuRouterDTO sysMenuRouterDTO = new SysMenuRouterDTO();
+            //判断是否是一级菜单
+            if (sysMenu.getType().equals(MenuTypeEnum.module.getValue())) {
+                sysMenuRouterDTO.setComponent("Layout");
+                sysMenuRouterDTO.setAlwaysShow(true);
+            } else {
+                sysMenuRouterDTO.setComponent(sysMenu.getUrl());
+                sysMenuRouterDTO.setAlwaysShow(false);
+            }
+            sysMenuRouterDTO.setName(sysMenu.getCode());//菜单编码
+            sysMenuRouterDTO.setRedirect(sysMenu.getUrl());//重定向地址
+            sysMenuRouterDTO.setPath(sysMenu.getUrl());//重定向地址
+            sysMenuRouterDTO.setMeta(new SysMenuRouterDTO.Meta(sysMenu.getName(), sysMenu.getIcon()));//标题、icon
+            sysMenuRouterDTO.setChildren(getSysMenuRouterDTOChildMenu(sysMenu.getId())); //递归查询子级
+            dtoList.add(sysMenuRouterDTO);
+        }
+        return CommonResult.success(dtoList);
+    }
+
+    /**
+     * 递归获取子级
+     * TODO getSysMenuRouterDTOChildMenu() getChildMenu()  使用反射+泛型方式，将方法封装
+     *
+     * @param parentId
+     * @return
+     */
+    public List<SysMenuRouterDTO> getSysMenuRouterDTOChildMenu(Integer parentId) {
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria()
+                .andIsDeletedEqualTo(IsDeletedEnum.not_Deleted.getValue())
+                .andTypeNotEqualTo(MenuTypeEnum.button.getValue())
+                .andParentIdEqualTo(parentId);
+        // 获取子级菜单项
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        List<SysMenuRouterDTO> childMenuItems = new ArrayList<>();
+        for (SysMenu menuItem : sysMenus) {
+            SysMenuRouterDTO sysMenuRouterDTO = new SysMenuRouterDTO();
+            sysMenuRouterDTO.setName(menuItem.getCode());
+            sysMenuRouterDTO.setPath(menuItem.getUrl());
+            sysMenuRouterDTO.setComponent(menuItem.getUrl());
+            sysMenuRouterDTO.setRedirect(menuItem.getUrl());
+            sysMenuRouterDTO.setMeta(new SysMenuRouterDTO.Meta(menuItem.getName(), menuItem.getIcon()));
+            sysMenuRouterDTO.setChildren(getSysMenuRouterDTOChildMenu(menuItem.getId()));
+            childMenuItems.add(sysMenuRouterDTO);
+        }
+        return childMenuItems;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.xin.entity.sys;
+package com.xin.entity;
 
 import java.io.Serializable;
 import java.util.Date;
