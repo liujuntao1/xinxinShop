@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: ljt
@@ -14,67 +16,56 @@ import java.util.List;
  * @Version 1.0.0
  */
 @Data
+@ApiModel(description = "用户登录信息")
 public class LoginUserInfoDTO {
-    /**
-     * 主键
-     */
+    @ApiModelProperty(value = "主键")
     private Integer id;
 
-    /**
-     * 昵称
-     */
+    @ApiModelProperty(value = "昵称")
     private String nickName;
 
-    /**
-     * 用户名
-     */
+    @ApiModelProperty(value = "用户名")
     private String userName;
 
-    /**
-     * 手机号
-     */
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
-    /**
-     * 邮箱
-     */
+    @ApiModelProperty(value = "邮箱")
     private String email;
 
-    /**
-     * 头像
-     */
+    @ApiModelProperty(value = "头像")
     private String avatar;
 
-    /**
-     * 用户状态（1：启用0:禁用）
-     */
+    @ApiModelProperty(value = "用户状态（1：启用0:禁用）")
     private Integer status;
 
-    /**
-     * 密码
-     */
+    @ApiModelProperty(value = "密码")
     private String pwd;
 
-    /**
-     * 删除状态（1：正常0：已删除）
-     */
+    @ApiModelProperty(value = "删除状态（1：正常0：已删除）")
     private Integer isDeleted;
 
-    /**
-     * 创建时间
-     */
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
-    /**
-     * 修改时间
-     */
+    @ApiModelProperty(value = "修改时间")
     private Date updatedTime;
-    /**
-     * 角色集合
-     */
+
+    @ApiModelProperty(value = "个人描述")
+    private String description;
+
+    @ApiModelProperty(value = "住址")
+    private String address;
+
+    @ApiModelProperty(value = "生日")
+    private Date birthday;
+
+    @ApiModelProperty(value = "性别（1：男2：女3：未知）")
+    private Integer sex;
+
+    @ApiModelProperty(value = "角色集合")
     private List<SysRole> roles;
-    /**
-     * 菜单集合
-     */
+
+    @ApiModelProperty(value = "菜单集合")
     private List<SysMenu> menus;
 }
